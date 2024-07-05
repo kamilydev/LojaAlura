@@ -13,44 +13,41 @@ public class ProdutoDao {
         this.em = em;
     }
 
-    public void cadastrar(Produto produto) {
+    public void cadastrar(Produto produto){
         this.em.persist(produto);
     }
-
-    public void atualizar(Produto produto) {
+    public void atualizar(Produto produto){
         this.em.merge(produto);
     }
-
-    public void deletar(Produto produto) {
+    public void deletar(Produto produto){
         produto = em.merge(produto);
         this.em.remove(produto);
     }
 
-    public Produto buscarPorID(Long id) {
+    public Produto buscarPorID(Long id){
         return em.find(Produto.class, id);
     }
 
-    public List<Produto> buscarTodos() {
+    public List<Produto> buscarTodos(){
         String jpql = "SELECT p FROM Produto p";
-        return em.createQuery(jpql, Produto.class).getResultList();
+        return  em.createQuery(jpql, Produto.class).getResultList();
     }
-
-    public List<Produto> buscarPorNome(String nome) {
+    public List<Produto> buscarPorNome(String nome){
         String jpql = "SELECT p FROM Produto p WHERE p.nome = :nome";
-        return em.createQuery(jpql, Produto.class)
+        return  em.createQuery(jpql, Produto.class)
                 .setParameter("nome", nome)
                 .getResultList();
     }
-//recurso para chamar o JPQL de outra forma
-    public List<Produto> buscarPorNomeCategoria(String nome) {
-        return em.createNamedQuery("Produto.produtosPorCategoria", Produto.class)
+    public List<Produto> buscarPorNomeCategoria(String nome){
+        String jpql = "SELECT p FROM Produto p WHERE p.categoria.nome = :nome";
+        return  em.createQuery(jpql, Produto.class)
                 .setParameter("nome", nome)
                 .getResultList();
     }
 
-    public BigDecimal buscarPrecoDoProdutoComNome(String nome) {
+    public BigDecimal buscarPrecoDoProdutoComNome(String nome){
         String jpql = "SELECT p.preco FROM Produto p WHERE p.nome = :nome";
-        return em.createQuery(jpql, BigDecimal.class)
+        return  em.createQuery(jpql, BigDecimal.class)
                 .setParameter("nome", nome)
                 .getSingleResult();
     }
